@@ -15,19 +15,32 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QGridLayout, QMainWindow, QPushButton,
-    QSizePolicy, QWidget)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QMainWindow,
+    QPushButton, QSizePolicy, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(791, 732)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayoutWidget = QWidget(self.centralwidget)
+        self.widget = QWidget(self.centralwidget)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(0, 0, 791, 741))
+        font = QFont()
+        font.setPointSize(9)
+        self.widget.setFont(font)
+        self.widget.setStyleSheet(u"background-color: rgb(0,81,44);\n"
+"")
+        self.widget_2 = QWidget(self.widget)
+        self.widget_2.setObjectName(u"widget_2")
+        self.widget_2.setGeometry(QRect(70, 150, 661, 561))
+        self.widget_2.setStyleSheet(u"background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.12 rgba(134, 94, 60, 255), stop:0.46 rgba(235, 148, 61, 255), stop:0.875 rgba(165, 119, 7, 255));\n"
+"border-radius: 10px;")
+        self.gridLayoutWidget = QWidget(self.widget_2)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(90, 30, 601, 541))
+        self.gridLayoutWidget.setGeometry(QRect(30, 10, 601, 541))
         self.gridLayout = QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -36,7 +49,9 @@ class Ui_MainWindow(object):
         self.b20.setMinimumSize(QSize(0, 80))
         self.b20.setMaximumSize(QSize(80, 16777215))
         self.b20.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b20.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b20.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b20.setAutoDefault(False)
         self.b20.setFlat(False)
@@ -48,7 +63,9 @@ class Ui_MainWindow(object):
         self.b40.setMinimumSize(QSize(0, 80))
         self.b40.setMaximumSize(QSize(80, 16777215))
         self.b40.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b40.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b40.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b40.setAutoDefault(False)
         self.b40.setFlat(False)
@@ -59,7 +76,9 @@ class Ui_MainWindow(object):
         self.b54.setObjectName(u"b54")
         self.b54.setMinimumSize(QSize(0, 80))
         self.b54.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b54.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b54.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b54.setAutoDefault(False)
         self.b54.setFlat(False)
@@ -71,7 +90,9 @@ class Ui_MainWindow(object):
         self.b34.setMinimumSize(QSize(0, 80))
         self.b34.setMaximumSize(QSize(80, 16777215))
         self.b34.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b34.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b34.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b34.setAutoDefault(False)
         self.b34.setFlat(False)
@@ -83,7 +104,9 @@ class Ui_MainWindow(object):
         self.b15.setMinimumSize(QSize(0, 80))
         self.b15.setMaximumSize(QSize(80, 16777215))
         self.b15.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b15.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b15.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b15.setAutoDefault(False)
         self.b15.setFlat(False)
@@ -95,7 +118,9 @@ class Ui_MainWindow(object):
         self.b00.setMinimumSize(QSize(0, 80))
         self.b00.setMaximumSize(QSize(80, 16777215))
         self.b00.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b00.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b00.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b00.setAutoDefault(False)
         self.b00.setFlat(False)
@@ -107,7 +132,9 @@ class Ui_MainWindow(object):
         self.b04.setMinimumSize(QSize(0, 80))
         self.b04.setMaximumSize(QSize(80, 16777215))
         self.b04.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b04.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b04.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b04.setAutoDefault(False)
         self.b04.setFlat(False)
@@ -119,7 +146,9 @@ class Ui_MainWindow(object):
         self.b01.setMinimumSize(QSize(0, 80))
         self.b01.setMaximumSize(QSize(80, 16777215))
         self.b01.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b01.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b01.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b01.setAutoDefault(False)
         self.b01.setFlat(False)
@@ -131,7 +160,9 @@ class Ui_MainWindow(object):
         self.b16.setMinimumSize(QSize(0, 80))
         self.b16.setMaximumSize(QSize(80, 16777215))
         self.b16.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b16.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b16.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b16.setAutoDefault(False)
         self.b16.setFlat(False)
@@ -143,7 +174,9 @@ class Ui_MainWindow(object):
         self.b43.setMinimumSize(QSize(0, 80))
         self.b43.setMaximumSize(QSize(80, 16777215))
         self.b43.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b43.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b43.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b43.setAutoDefault(False)
         self.b43.setFlat(False)
@@ -155,7 +188,9 @@ class Ui_MainWindow(object):
         self.b31.setMinimumSize(QSize(0, 80))
         self.b31.setMaximumSize(QSize(80, 16777215))
         self.b31.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b31.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b31.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b31.setAutoDefault(False)
         self.b31.setFlat(False)
@@ -167,7 +202,9 @@ class Ui_MainWindow(object):
         self.b52.setMinimumSize(QSize(0, 80))
         self.b52.setMaximumSize(QSize(80, 16777215))
         self.b52.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b52.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b52.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b52.setAutoDefault(False)
         self.b52.setFlat(False)
@@ -179,7 +216,9 @@ class Ui_MainWindow(object):
         self.b21.setMinimumSize(QSize(0, 80))
         self.b21.setMaximumSize(QSize(80, 16777215))
         self.b21.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b21.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b21.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b21.setAutoDefault(False)
         self.b21.setFlat(False)
@@ -191,7 +230,9 @@ class Ui_MainWindow(object):
         self.b06.setMinimumSize(QSize(0, 80))
         self.b06.setMaximumSize(QSize(80, 16777215))
         self.b06.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b06.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b06.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b06.setAutoDefault(False)
         self.b06.setFlat(False)
@@ -203,7 +244,9 @@ class Ui_MainWindow(object):
         self.b36.setMinimumSize(QSize(0, 80))
         self.b36.setMaximumSize(QSize(80, 16777215))
         self.b36.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b36.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b36.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b36.setAutoDefault(False)
         self.b36.setFlat(False)
@@ -215,7 +258,9 @@ class Ui_MainWindow(object):
         self.b22.setMinimumSize(QSize(0, 80))
         self.b22.setMaximumSize(QSize(80, 16777215))
         self.b22.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b22.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b22.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b22.setAutoDefault(False)
         self.b22.setFlat(False)
@@ -227,7 +272,9 @@ class Ui_MainWindow(object):
         self.b14.setMinimumSize(QSize(0, 80))
         self.b14.setMaximumSize(QSize(80, 16777215))
         self.b14.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b14.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b14.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b14.setAutoDefault(False)
         self.b14.setFlat(False)
@@ -239,7 +286,9 @@ class Ui_MainWindow(object):
         self.b51.setMinimumSize(QSize(0, 80))
         self.b51.setMaximumSize(QSize(80, 16777215))
         self.b51.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b51.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b51.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b51.setAutoDefault(False)
         self.b51.setFlat(False)
@@ -250,7 +299,9 @@ class Ui_MainWindow(object):
         self.b56.setObjectName(u"b56")
         self.b56.setMinimumSize(QSize(0, 80))
         self.b56.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b56.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b56.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b56.setAutoDefault(False)
         self.b56.setFlat(False)
@@ -262,7 +313,9 @@ class Ui_MainWindow(object):
         self.b03.setMinimumSize(QSize(0, 80))
         self.b03.setMaximumSize(QSize(80, 16777215))
         self.b03.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b03.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b03.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b03.setAutoDefault(False)
         self.b03.setFlat(False)
@@ -274,7 +327,9 @@ class Ui_MainWindow(object):
         self.b32.setMinimumSize(QSize(0, 80))
         self.b32.setMaximumSize(QSize(80, 16777215))
         self.b32.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b32.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b32.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b32.setAutoDefault(False)
         self.b32.setFlat(False)
@@ -286,7 +341,9 @@ class Ui_MainWindow(object):
         self.b24.setMinimumSize(QSize(0, 80))
         self.b24.setMaximumSize(QSize(80, 16777215))
         self.b24.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b24.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b24.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b24.setAutoDefault(False)
         self.b24.setFlat(False)
@@ -298,7 +355,9 @@ class Ui_MainWindow(object):
         self.b10.setMinimumSize(QSize(0, 80))
         self.b10.setMaximumSize(QSize(80, 16777215))
         self.b10.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b10.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b10.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b10.setAutoDefault(False)
         self.b10.setFlat(False)
@@ -310,7 +369,9 @@ class Ui_MainWindow(object):
         self.b45.setMinimumSize(QSize(0, 80))
         self.b45.setMaximumSize(QSize(80, 16777215))
         self.b45.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b45.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b45.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b45.setAutoDefault(False)
         self.b45.setFlat(False)
@@ -322,7 +383,9 @@ class Ui_MainWindow(object):
         self.b44.setMinimumSize(QSize(0, 80))
         self.b44.setMaximumSize(QSize(80, 16777215))
         self.b44.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b44.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b44.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b44.setAutoDefault(False)
         self.b44.setFlat(False)
@@ -334,7 +397,9 @@ class Ui_MainWindow(object):
         self.b41.setMinimumSize(QSize(0, 80))
         self.b41.setMaximumSize(QSize(80, 16777215))
         self.b41.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b41.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b41.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b41.setAutoDefault(False)
         self.b41.setFlat(False)
@@ -346,7 +411,9 @@ class Ui_MainWindow(object):
         self.b33.setMinimumSize(QSize(0, 80))
         self.b33.setMaximumSize(QSize(80, 16777215))
         self.b33.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b33.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b33.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b33.setAutoDefault(False)
         self.b33.setFlat(False)
@@ -358,7 +425,9 @@ class Ui_MainWindow(object):
         self.b42.setMinimumSize(QSize(0, 80))
         self.b42.setMaximumSize(QSize(80, 16777215))
         self.b42.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b42.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b42.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b42.setAutoDefault(False)
         self.b42.setFlat(False)
@@ -370,7 +439,9 @@ class Ui_MainWindow(object):
         self.b12.setMinimumSize(QSize(0, 80))
         self.b12.setMaximumSize(QSize(80, 16777215))
         self.b12.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b12.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b12.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b12.setAutoDefault(False)
         self.b12.setFlat(False)
@@ -382,7 +453,9 @@ class Ui_MainWindow(object):
         self.b13.setMinimumSize(QSize(0, 80))
         self.b13.setMaximumSize(QSize(80, 16777215))
         self.b13.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b13.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b13.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b13.setAutoDefault(False)
         self.b13.setFlat(False)
@@ -394,7 +467,9 @@ class Ui_MainWindow(object):
         self.b11.setMinimumSize(QSize(0, 80))
         self.b11.setMaximumSize(QSize(80, 16777215))
         self.b11.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b11.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b11.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b11.setAutoDefault(False)
         self.b11.setFlat(False)
@@ -406,7 +481,9 @@ class Ui_MainWindow(object):
         self.b23.setMinimumSize(QSize(0, 80))
         self.b23.setMaximumSize(QSize(80, 16777215))
         self.b23.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b23.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b23.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b23.setAutoDefault(False)
         self.b23.setFlat(False)
@@ -418,7 +495,9 @@ class Ui_MainWindow(object):
         self.b25.setMinimumSize(QSize(0, 80))
         self.b25.setMaximumSize(QSize(80, 16777215))
         self.b25.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b25.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b25.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b25.setAutoDefault(False)
         self.b25.setFlat(False)
@@ -430,7 +509,9 @@ class Ui_MainWindow(object):
         self.b30.setMinimumSize(QSize(0, 80))
         self.b30.setMaximumSize(QSize(80, 16777215))
         self.b30.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b30.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b30.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b30.setAutoDefault(False)
         self.b30.setFlat(False)
@@ -442,7 +523,9 @@ class Ui_MainWindow(object):
         self.b46.setMinimumSize(QSize(0, 80))
         self.b46.setMaximumSize(QSize(80, 16777215))
         self.b46.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b46.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b46.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b46.setAutoDefault(False)
         self.b46.setFlat(False)
@@ -454,7 +537,9 @@ class Ui_MainWindow(object):
         self.b53.setMinimumSize(QSize(0, 80))
         self.b53.setMaximumSize(QSize(80, 16777215))
         self.b53.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b53.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b53.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b53.setAutoDefault(False)
         self.b53.setFlat(False)
@@ -466,7 +551,9 @@ class Ui_MainWindow(object):
         self.b02.setMinimumSize(QSize(0, 80))
         self.b02.setMaximumSize(QSize(80, 16777215))
         self.b02.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b02.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b02.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b02.setAutoDefault(False)
         self.b02.setFlat(False)
@@ -478,7 +565,9 @@ class Ui_MainWindow(object):
         self.b05.setMinimumSize(QSize(0, 80))
         self.b05.setMaximumSize(QSize(80, 16777215))
         self.b05.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b05.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b05.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b05.setAutoDefault(False)
         self.b05.setFlat(False)
@@ -489,7 +578,9 @@ class Ui_MainWindow(object):
         self.b55.setObjectName(u"b55")
         self.b55.setMinimumSize(QSize(0, 80))
         self.b55.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b55.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b55.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b55.setAutoDefault(False)
         self.b55.setFlat(False)
@@ -501,7 +592,9 @@ class Ui_MainWindow(object):
         self.b35.setMinimumSize(QSize(0, 80))
         self.b35.setMaximumSize(QSize(80, 16777215))
         self.b35.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b35.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b35.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b35.setAutoDefault(False)
         self.b35.setFlat(False)
@@ -513,7 +606,9 @@ class Ui_MainWindow(object):
         self.b26.setMinimumSize(QSize(0, 80))
         self.b26.setMaximumSize(QSize(80, 16777215))
         self.b26.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b26.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b26.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b26.setAutoDefault(False)
         self.b26.setFlat(False)
@@ -525,13 +620,33 @@ class Ui_MainWindow(object):
         self.b50.setMinimumSize(QSize(0, 80))
         self.b50.setMaximumSize(QSize(80, 16777215))
         self.b50.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-        self.b50.setStyleSheet(u"background-color: rgb(28, 113, 216);\n"
+        self.b50.setStyleSheet(u"color: rgb(0,81,44);\n"
+"background-color:rgb(0,81,44);\n"
+"gridline-color: rgb(255, 190, 111);\n"
 "border-radius: 40px")
         self.b50.setAutoDefault(False)
         self.b50.setFlat(False)
 
         self.gridLayout.addWidget(self.b50, 5, 1, 1, 1)
 
+        self.restartButton = QPushButton(self.widget)
+        self.restartButton.setObjectName(u"restartButton")
+        self.restartButton.setGeometry(QRect(440, 30, 201, 61))
+        self.restartButton.setStyleSheet(u"font: 600 25pt \"URW Gothic\";\n"
+"color: rgb(255, 255, 255);")
+        self.currentTurn = QPushButton(self.widget)
+        self.currentTurn.setObjectName(u"currentTurn")
+        self.currentTurn.setGeometry(QRect(140, 20, 88, 81))
+        self.label = QLabel(self.widget)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(140, 100, 511, 41))
+        font1 = QFont()
+        font1.setFamilies([u"URW Gothic"])
+        font1.setPointSize(20)
+        font1.setBold(True)
+        self.label.setFont(font1)
+        self.label.setStyleSheet(u"color: rgb(246, 211, 45);")
+        self.label.setAlignment(Qt.AlignHCenter|Qt.AlignTop)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -627,5 +742,8 @@ class Ui_MainWindow(object):
         self.b35.setText("")
         self.b26.setText("")
         self.b50.setText("")
+        self.restartButton.setText(QCoreApplication.translate("MainWindow", u"RESTART", None))
+        self.currentTurn.setText("")
+        self.label.setText("")
     # retranslateUi
 

@@ -3,11 +3,7 @@ import sys
 import random
 
 from PySide6.QtWidgets import QApplication, QMainWindow
-
-# Important:
-# You need to run the following command to generate the ui_form.py file
-#     pyside6-uic form.ui -o ui_form.py, or
-#     pyside2-uic form.ui -o ui_form.py
+from PySide6.QtCore import QTimer
 from ui_form import Ui_MainWindow
 
 class MainWindow(QMainWindow):
@@ -16,16 +12,17 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        #Yellow dictionary where we'll put yellow player coin's coordinates.
-        self.yellow_dic = {}
-
         #Bool that will handle turns
         self.yellowTurn = False
         self.redTurn = False
 
-        #Bool to check if someone won.
-        self.someone_won = False
+        self.coordinateX = None
+        self.coordinateY = None
 
+        #Bool to check if someone won.
+        self.red_player_won = False
+        self.yellow_player_won = False
+        self.ui.label.setEnabled(False)
         #2D matrix
         self.matrix = [
             [None, None, None, None, None, None, None], 
@@ -35,9 +32,6 @@ class MainWindow(QMainWindow):
             [None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None],
         ]
-
-        #Index needed to feel the self.yellow dictionary.
-        self.i = 0
 
         #Buttons list.
         self.buttons = [
@@ -54,7 +48,26 @@ class MainWindow(QMainWindow):
         self.button_assign_function()
 
         #Call start_game function.
+        self.ui.restartButton.clicked.connect(self.resetBoard)
         self.start_game()
+        self.randomTurn()
+        if self.yellowTurn == False:
+            self.ui.currentTurn.setStyleSheet(("color: red; background-color: red"))
+        else:
+            self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
+        if self.redMove:
+            self.redMove()
+
+
+    def print_grid(self):
+        '''Funzione che stampa sul terminale la griglia.
+            Sostituisce ogni elemento con un punto se è None altrimenti stampa l'elemento
+            seguito da un " | " sotto forma di stringa. '''
+        print("Stato attuale della griglia:")
+        for row in self.matrix:
+            print(" | ".join(str(elem) if elem is not None else '.' for elem in row)) 
+        print("-" * 29)
+
     
     
     def button_assign_function(self):
@@ -70,25 +83,33 @@ class MainWindow(QMainWindow):
             else:
                 button.setMinimumSize(0,80)
                 button.setMaximumSize(80,80)
-                button.setStyleSheet("border-radius:40px; background-color: #a4acb0")
+                button.setStyleSheet("border-radius:40px; background-color:rgb(0,81,44);")
                 button.setEnabled(False)    
 
     def enable_coins(self):
         '''Function that will enable certain buttons. This button will be Y-1 cell from  selected button.'''
-        self.coin_to_enable = (f"b{self.coordinateY - 1}{self.coordinateX}")
+        if self.yellowTurn:
+            self.coin_to_enable = (f"b{self.coordinateY - 1}{self.coordinateX}")
+        elif self.redTurn:
+            self.coin_to_enable = (f"b{self.redCoordinateY -1}{self.redCoordinateX}")
+
         for button in self.buttons:
             if button.objectName() == self.coin_to_enable:
                 button.setEnabled(True)
                 button.setMinimumSize(0,80)
                 button.setMaximumSize(80,80)
-                button.setStyleSheet("border-radius:40px; background-color: rgb(28, 113, 216)")
+                button.setStyleSheet("border-radius:40px; background-color: rgb(0,81,44)")
 
     def matrix_handling(self):
         '''Function to put "Y" on a 2d matrix. We'll need this function in order to detect a potential winner'''
-        self.coordinateY = int(self.button_name[1])
-        self.coordinateX = int(self.button_name[2])
-        self.matrix[self.coordinateY][self.coordinateX] = "Y"
-
+        if self.yellowTurn:
+            self.coordinateY = int(self.button_name[1])
+            self.coordinateX = int(self.button_name[2])
+            self.matrix[self.coordinateY][self.coordinateX] = "Y"
+        else:
+            self.redCoordinateY = int(self.red_button_name[1])
+            self.redCoordinateX = int(self.red_button_name[2])
+            self.matrix[self.redCoordinateY][self.redCoordinateX] = "R"
     #------------------------------------------------------------------------------------------------------------------#
     #                                    CHECK YELLOW PLAYER WIN-CON                                                   #
     #------------------------------------------------------------------------------------------------------------------#
@@ -100,9 +121,11 @@ class MainWindow(QMainWindow):
             for j in range(len(self.matrix)):
                 if self.matrix[j][k] == "Y":
                     consecutive_coins += 1
+                else:
+                    consecutive_coins = 0
                 if consecutive_coins == 4:
                     print("Yellow player won. Vertical win")
-                    self.someone_won = True
+                    self.yellow_player_won = True
                     break
 
     def horizontal_win_con(self):
@@ -113,9 +136,11 @@ class MainWindow(QMainWindow):
             for j in range(len(self.matrix[0])):
                 if self.matrix[k][j] == "Y":
                     consecutive_coins += 1
+                else:
+                    consecutive_coins = 0
                 if consecutive_coins == 4:
                     print("Yellow player won. Horizontal win")
-                    self.someone_won = True
+                    self.yellow_player_won = True
                     break
 
     def diagonal_win_con_negative(self):
@@ -126,6 +151,7 @@ class MainWindow(QMainWindow):
                     consecutive_coins = 4
                     if consecutive_coins == 4:
                         print("Yellow player won Diagonally Negative!")
+                        self.yellow_player_won = True
     
     def diagonal_win_con_positive(self):
         '''Function to check if there are 4 coins diagonally aligned in a positive manner.'''
@@ -134,7 +160,61 @@ class MainWindow(QMainWindow):
                 if (self.matrix[j][k] == "Y" and self.matrix[j-1][k+1] == "Y" and self.matrix[j-2][k+2] == "Y" and self.matrix[j-3][k+3] == "Y"):
                     consecutive_coins = 4
                     if consecutive_coins == 4:
-                        print("Yellow player won Diagonally Positive!")   
+                        print("Yellow player won Diagonally Positive!")
+                        self.yellow_player_won = True
+
+#------------------------------------------------------------------------------------------------------------------#
+#                                    CHECK AI WIN-CON                                                   #
+#------------------------------------------------------------------------------------------------------------------#
+    def red_vertical_win_con(self):
+            '''Function to check where there are 4 red coins in vertical'''
+            red_consecutive_coins = 0
+            for k in range(len(self.matrix[0])):
+                red_consecutive_coins = 0
+                for j in range(len(self.matrix)):
+                    if self.matrix[j][k] == "R":
+                        red_consecutive_coins += 1
+                    else:
+                        red_consecutive_coins = 0
+                    if red_consecutive_coins == 4:
+                        print("Red player won. Vertical win")
+                        self.red_player_won = True
+                        break
+
+    def red_horizontal_win_con(self):
+        '''Function to check where there are 4 red coins in horizontal.'''
+        red_consecutive_coins = 0
+        for k in range(len(self.matrix)):
+            red_consecutive_coins = 0
+            for j in range(len(self.matrix[0])):
+                if self.matrix[k][j] == "R":
+                    red_consecutive_coins += 1
+                else:
+                    red_consecutive_coins = 0
+                if red_consecutive_coins == 4:
+                    print("Yellow player won. Horizontal win")
+                    self.red_player_won = True
+                    break
+
+    def red_diagonal_win_con_negative(self):
+        '''Function to check if there are 4 red coins diagonally aligned in a negative manner.'''
+        for k in range(3,len(self.matrix[0])):
+            for j in range(len(self.matrix)):
+                if (self.matrix[j][k] == "R" and self.matrix[j-1][k-1] == "R" and self.matrix[j-2][k-2] == "R" and self.matrix[j-3][k-3] == "R"):
+                    red_consecutive_coins = 4
+                    if red_consecutive_coins == 4:
+                        print("Yellow player won Diagonally Negative!")
+                        self.red_player_won = True
+    
+    def red_diagonal_win_con_positive(self):
+        '''Function to check if there are 4 red coins diagonally aligned in a positive manner.'''
+        for k in range(len(self.matrix[0])-3):
+            for j in range(3,len(self.matrix)):
+                if (self.matrix[j][k] == "R" and self.matrix[j-1][k+1] == "R" and self.matrix[j-2][k+2] == "R" and self.matrix[j-3][k+3] == "R"):
+                    red_consecutive_coins = 4
+                    if red_consecutive_coins == 4:
+                        print("Yellow player won Diagonally Positive!")
+                        self.red_player_won = True
 
 #------------------------------------------------------------------------------------------------------------------------#
 #                                               YELLOW MOVE                                                              #
@@ -143,38 +223,59 @@ class MainWindow(QMainWindow):
     def yellowMove(self):
         '''Function that will handle button clicked event. When a button is clicked, we'll turn the current button to yellow.
         Each time a button is clicked and a coin is added, we'll check for vertical, horizontal and diagonal win condition'''
-        self.button_name = self.sender().objectName()
-        for button in self.buttons:
-            if self.button_name == button.objectName():
-                #Change button style when clicked.
-                #Since buttons are by default square we've to edit min-max size and border radius each time a button is clicked.
-                button.setEnabled(False) #Make it so clicked buttons are disabled to avoid strange behaviours.
-                button.setMinimumSize(0,80) 
-                button.setMaximumSize(80,80)
-                button.setStyleSheet("border-radius:40px; color: yellow; background-color: yellow")
-                #Retrieve button coordinates and put them inside the dictionary along with a "Yellow tag."
-                self.coordinateY = int(self.button_name[1])
-                self.coordinateX = int(self.button_name[2])
-                #Previously declared index used for the dictionary.
-                self.i += 1
-                self.yellow_dic[self.i] = self.coordinateX, self.coordinateY , "yellow"
+        if self.yellowTurn:
+            self.button_name = self.sender().objectName()
+            for button in self.buttons:
+                if self.button_name == button.objectName():
 
-                #Various methods used to fill the board and check wincons.
-                self.enable_coins() #Enable certain spots when a coin is
-                self.matrix_handling()
-                self.check_available_moves()
-                self.vertical_win_con()
-                self.horizontal_win_con()
-                self.diagonal_win_con_negative()
-                self.diagonal_win_con_positive()
-    
-    def yellowTurn(self):
-        self.yellowTurn = True
-        self.redTurn = False
-    
-    def redTurn(self):
-        self.redTurn = True
-        self.yellowTurn = False
+                    #Change button style when clicked.
+                    #Since buttons are by default square we've to edit min-max size and border radius each time a button is clicked.
+                    button.setEnabled(False) #Make it so clicked buttons are disabled to avoid strange behaviours.
+                    button.setMinimumSize(0,80) 
+                    button.setMaximumSize(80,80)
+                    button.setStyleSheet("border-radius:40px; color: yellow; background-color: yellow")
+
+                    #Retrieve button coordinates. Coordinates serves different purposes like enabling coin spots etc.
+                    self.coordinateY = int(self.button_name[1])
+                    self.coordinateX = int(self.button_name[2])
+                    
+                    #Various methods used to fill the board and check wincons.
+                    self.enable_coins() #Enable certain spots when a coin is
+                    self.matrix_handling()
+                    self.enable_coins()
+                    self.vertical_win_con()
+                    self.horizontal_win_con()
+                    self.diagonal_win_con_negative()
+                    self.diagonal_win_con_positive()
+                    self.check_winner()
+                    self.print_grid()
+                    self.yellowTurn = False
+                    if self.yellowTurn == False:
+                        self.ui.currentTurn.setStyleSheet(("color: red; background-color: red"))
+                    self.redTurn = True
+                    QTimer.singleShot(2000,self.redMove)
+
+    def redMove(self):
+        if self.redTurn:
+            self.check_available_moves() #Check available move
+            self.red_insert_coin() #Use above method to place a red coin.
+            self.enable_coins() #Enable the coin above the one we've just placed.
+            self.matrix_handling() #Place a "R" on the virtual 2d matrix.
+
+            #Red players winCon
+            self.red_vertical_win_con()
+            self.red_horizontal_win_con()
+            self.red_diagonal_win_con_negative()
+            self.red_diagonal_win_con_positive()
+            self.check_winner()
+            #Uncomment to print grid to the stdout.
+            self.print_grid()
+
+            #Switch turn
+            self.redTurn = False
+            if self.redTurn == False:
+                self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
+            self.yellowTurn = True
     
 
     #----------------------------------------------------------------------------------------------------------------------------#
@@ -184,12 +285,79 @@ class MainWindow(QMainWindow):
     def check_available_moves(self):
         '''Function to check which available moves are available for the bot.'''
         available_moves = []
+        seen = None
         for button in self.buttons:
             if button.isEnabled() == True:
-                available_moves.append(button.objectName())
-        return random.choice(available_moves)
+                available_moves.append(button)
 
+        for button in available_moves:
+            if button.isEnabled() == True:
+                move = random.choice(available_moves)
+                if seen != move:
+                    move_to_use = move
+                else:
+                    continue
+                break
 
+        self.red_button_name = (move_to_use.objectName())
+
+    def red_insert_coin(self):
+        for button in self.buttons:
+            if self.red_button_name == button.objectName():
+                button.setEnabled(False) #Make it so clicked buttons are disabled to avoid strange behaviours.
+                button.setMinimumSize(0,80) 
+                button.setMaximumSize(80,80)
+                button.setStyleSheet("border-radius:40px; color: red; background-color: red")
+                self.redCoordinateY = int(self.red_button_name[1])
+                self.redCoordinateX = int(self.red_button_name[2])
+
+    def check_winner(self):
+        if self.red_player_won:
+            self.ui.label.setEnabled(True)
+            self.ui.label.setText("BOT WON! CONGRATZ ᕙ(  •̀ ᗜ •́  )ᕗ")
+        elif self.yellow_player_won:
+            self.ui.label.setEnabled(True)
+            self.ui.label.setText("YOU WON! CONGRATZ ᕙ(  •̀ ᗜ •́  )ᕗ")
+
+    def resetBoard(self):
+        for button in self.buttons:
+            button.setStyleSheet(("border-radius:40px; background-color:rgb(0,81,44);"))
+        self.ui.label.setEnabled(False)
+        self.start_game()
+        self.randomTurn()
+        if self.yellowTurn == False:
+            self.ui.currentTurn.setStyleSheet(("color: red; background-color: red"))
+        else:
+            self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
+        if self.redMove:
+            self.redMove()
+        self.buttons = [
+            self.ui.b00, self.ui.b01, self.ui.b02, self.ui.b03, self.ui.b04, self.ui.b05, self.ui.b06,
+            self.ui.b10, self.ui.b11, self.ui.b12, self.ui.b13, self.ui.b14, self.ui.b15, self.ui.b16,
+            self.ui.b20, self.ui.b21, self.ui.b22, self.ui.b23, self.ui.b24, self.ui.b25, self.ui.b26,
+            self.ui.b30, self.ui.b31, self.ui.b32, self.ui.b33, self.ui.b34, self.ui.b35, self.ui.b36,
+            self.ui.b40, self.ui.b41, self.ui.b42, self.ui.b43, self.ui.b44, self.ui.b45, self.ui.b46,
+            self.ui.b50, self.ui.b51, self.ui.b52, self.ui.b53, self.ui.b54, self.ui.b55, self.ui.b56
+        ]
+        self.matrix = [
+            [None, None, None, None, None, None, None], 
+            [None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None],
+        ]
+
+    def randomTurn(self):
+        random_choice = ('red','yellow')
+        random_turn = random.choice(random_choice)
+        if random_turn == 'red':
+            print("Comincia il rosso!")
+            self.redTurn = True
+        else:
+            print("Comincia il giallo!")
+            self.yellowTurn = True
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
