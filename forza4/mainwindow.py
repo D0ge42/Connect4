@@ -22,8 +22,11 @@ class MainWindow(QMainWindow):
         #Bool to check if someone won.
         self.red_player_won = False
         self.yellow_player_won = False
-        self.ui.label.setEnabled(False)
-        #2D matrix
+
+        #Winner text set to blank at start.
+        self.ui.label.setText("")
+
+        #2D matrix to simulate board. We'll use this to detect winners.
         self.matrix = [
             [None, None, None, None, None, None, None], 
             [None, None, None, None, None, None, None],
@@ -33,7 +36,7 @@ class MainWindow(QMainWindow):
             [None, None, None, None, None, None, None],
         ]
 
-        #Buttons list.
+        #Buttons list from where we'll retrieve buttons to  enable, disable etc.
         self.buttons = [
             self.ui.b00, self.ui.b01, self.ui.b02, self.ui.b03, self.ui.b04, self.ui.b05, self.ui.b06,
             self.ui.b10, self.ui.b11, self.ui.b12, self.ui.b13, self.ui.b14, self.ui.b15, self.ui.b16,
@@ -41,34 +44,34 @@ class MainWindow(QMainWindow):
             self.ui.b30, self.ui.b31, self.ui.b32, self.ui.b33, self.ui.b34, self.ui.b35, self.ui.b36,
             self.ui.b40, self.ui.b41, self.ui.b42, self.ui.b43, self.ui.b44, self.ui.b45, self.ui.b46,
             self.ui.b50, self.ui.b51, self.ui.b52, self.ui.b53, self.ui.b54, self.ui.b55, self.ui.b56
-]
+            ]
 
 
         #Call self.button assign function.
         self.button_assign_function()
 
-        #Call start_game function.
+        #Assign restart button function.
         self.ui.restartButton.clicked.connect(self.resetBoard)
+
+        #Call start_game function.
         self.start_game()
         self.randomTurn()
         if self.yellowTurn == False:
             self.ui.currentTurn.setStyleSheet(("color: red; background-color: red"))
         else:
             self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
-        if self.redMove:
+        if self.redTurn:
             self.redMove()
 
 
     def print_grid(self):
-        '''Funzione che stampa sul terminale la griglia.
-            Sostituisce ogni elemento con un punto se è None altrimenti stampa l'elemento
-            seguito da un " | " sotto forma di stringa. '''
+        ''' FUnction to print  the self.matrix to the stdout. It will join each element that is not none into a string followed by a " | ". Else
+            it will place a "."'''
         print("Stato attuale della griglia:")
         for row in self.matrix:
             print(" | ".join(str(elem) if elem is not None else '.' for elem in row)) 
         print("-" * 29)
 
-    
     
     def button_assign_function(self):
         '''Function to assign to each button the self.buttonPressed() function on click.'''
@@ -87,12 +90,11 @@ class MainWindow(QMainWindow):
                 button.setEnabled(False)    
 
     def enable_coins(self):
-        '''Function that will enable certain buttons. This button will be Y-1 cell from  selected button.'''
+        '''Function that will enable and set-stylesheet for certain buttons. This button will be Y-1 cell from  selected button.'''
         if self.yellowTurn:
             self.coin_to_enable = (f"b{self.coordinateY - 1}{self.coordinateX}")
         elif self.redTurn:
             self.coin_to_enable = (f"b{self.redCoordinateY -1}{self.redCoordinateX}")
-
         for button in self.buttons:
             if button.objectName() == self.coin_to_enable:
                 button.setEnabled(True)
@@ -110,6 +112,7 @@ class MainWindow(QMainWindow):
             self.redCoordinateY = int(self.red_button_name[1])
             self.redCoordinateX = int(self.red_button_name[2])
             self.matrix[self.redCoordinateY][self.redCoordinateX] = "R"
+
     #------------------------------------------------------------------------------------------------------------------#
     #                                    CHECK YELLOW PLAYER WIN-CON                                                   #
     #------------------------------------------------------------------------------------------------------------------#
@@ -221,8 +224,8 @@ class MainWindow(QMainWindow):
 #------------------------------------------------------------------------------------------------------------------------#
 
     def yellowMove(self):
-        '''Function that will handle button clicked event. When a button is clicked, we'll turn the current button to yellow.
-        Each time a button is clicked and a coin is added, we'll check for vertical, horizontal and diagonal win condition'''
+        '''Function that will handle player input. It places the coin on any choosen available spot, checks for win condition and
+            eventually switch turn. It also uses a Qtimer Oneshot that will simulate bot thinking (2 seconds timer)'''
         if self.yellowTurn:
             self.button_name = self.sender().objectName()
             for button in self.buttons:
@@ -256,6 +259,7 @@ class MainWindow(QMainWindow):
                     QTimer.singleShot(2000,self.redMove)
 
     def redMove(self):
+        '''Function that handles red turn. It places coins, checks for win conditions and switch turn when self turn has finished.'''
         if self.redTurn:
             self.check_available_moves() #Check available move
             self.red_insert_coin() #Use above method to place a red coin.
@@ -282,6 +286,7 @@ class MainWindow(QMainWindow):
     #                                           AI MOVE                                                                          #
     #----------------------------------------------------------------------------------------------------------------------------#
     
+
     def check_available_moves(self):
         '''Function to check which available moves are available for the bot.'''
         available_moves = []
@@ -302,6 +307,7 @@ class MainWindow(QMainWindow):
         self.red_button_name = (move_to_use.objectName())
 
     def red_insert_coin(self):
+        '''Function to place a red player coin. It will use the spot provided by check_available_moves.'''
         for button in self.buttons:
             if self.red_button_name == button.objectName():
                 button.setEnabled(False) #Make it so clicked buttons are disabled to avoid strange behaviours.
@@ -312,33 +318,35 @@ class MainWindow(QMainWindow):
                 self.redCoordinateX = int(self.red_button_name[2])
 
     def check_winner(self):
+        '''Function that triggers if self.red_player_won or self.yellow_player_won is True.
+           It displays a text message on screen and reset winner's bool to False'''
         if self.red_player_won:
             self.ui.label.setEnabled(True)
             self.ui.label.setText("BOT WON! CONGRATZ ᕙ(  •̀ ᗜ •́  )ᕗ")
+            self.red_player_won = False
+            QTimer.singleShot(2000, self.resetBoard)
+
         elif self.yellow_player_won:
             self.ui.label.setEnabled(True)
             self.ui.label.setText("YOU WON! CONGRATZ ᕙ(  •̀ ᗜ •́  )ᕗ")
+            self.yellow_player_won = False
+            QTimer.singleShot(2000,self.resetBoard)
+
+    def draw(self):
+        '''Function that will handle draws'''
+        i = 1
+        for button in self.buttons:
+            if button.isEnabled():
+                print(f"{i} bottoni abilitati")
+                i += 1
 
     def resetBoard(self):
+        '''Function to resetBoard to 0. It can be called either by clicking or winning/drawing the game.'''
+        self.ui.label.setText("")
         for button in self.buttons:
             button.setStyleSheet(("border-radius:40px; background-color:rgb(0,81,44);"))
-        self.ui.label.setEnabled(False)
         self.start_game()
-        self.randomTurn()
-        if self.yellowTurn == False:
-            self.ui.currentTurn.setStyleSheet(("color: red; background-color: red"))
-        else:
-            self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
-        if self.redMove:
-            self.redMove()
-        self.buttons = [
-            self.ui.b00, self.ui.b01, self.ui.b02, self.ui.b03, self.ui.b04, self.ui.b05, self.ui.b06,
-            self.ui.b10, self.ui.b11, self.ui.b12, self.ui.b13, self.ui.b14, self.ui.b15, self.ui.b16,
-            self.ui.b20, self.ui.b21, self.ui.b22, self.ui.b23, self.ui.b24, self.ui.b25, self.ui.b26,
-            self.ui.b30, self.ui.b31, self.ui.b32, self.ui.b33, self.ui.b34, self.ui.b35, self.ui.b36,
-            self.ui.b40, self.ui.b41, self.ui.b42, self.ui.b43, self.ui.b44, self.ui.b45, self.ui.b46,
-            self.ui.b50, self.ui.b51, self.ui.b52, self.ui.b53, self.ui.b54, self.ui.b55, self.ui.b56
-        ]
+        self.ui.label.setText("")
         self.matrix = [
             [None, None, None, None, None, None, None], 
             [None, None, None, None, None, None, None],
@@ -347,8 +355,15 @@ class MainWindow(QMainWindow):
             [None, None, None, None, None, None, None],
             [None, None, None, None, None, None, None],
         ]
-
+        self.yellowTurn = False
+        self.redTurn = False
+        self.randomTurn()
+        if self.redTurn:
+            self.redMove()
+            
+            
     def randomTurn(self):
+        '''Function to choose whoever is gonna make the first move. Uses a tuple and random library to choose.'''
         random_choice = ('red','yellow')
         random_turn = random.choice(random_choice)
         if random_turn == 'red':

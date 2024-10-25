@@ -639,6 +639,7 @@ class Ui_MainWindow(object):
         self.currentTurn.setGeometry(QRect(140, 20, 88, 81))
         self.label = QLabel(self.widget)
         self.label.setObjectName(u"label")
+        self.label.setEnabled(True)
         self.label.setGeometry(QRect(140, 100, 511, 41))
         font1 = QFont()
         font1.setFamilies([u"URW Gothic"])
