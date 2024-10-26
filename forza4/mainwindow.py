@@ -5,6 +5,10 @@ import random
 from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import QTimer
 from ui_form import Ui_MainWindow
+from WinConPlayer.wincon import WinCondition
+from WinConAi.winconAi import AiWinCondition
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -113,112 +117,6 @@ class MainWindow(QMainWindow):
             self.redCoordinateX = int(self.red_button_name[2])
             self.matrix[self.redCoordinateY][self.redCoordinateX] = "R"
 
-    #------------------------------------------------------------------------------------------------------------------#
-    #                                    CHECK YELLOW PLAYER WIN-CON                                                   #
-    #------------------------------------------------------------------------------------------------------------------#
-    def vertical_win_con(self):
-        '''Function to check where there are 4 yellow coins in vertical'''
-        consecutive_coins = 0
-        for k in range(len(self.matrix[0])):
-            consecutive_coins = 0
-            for j in range(len(self.matrix)):
-                if self.matrix[j][k] == "Y":
-                    consecutive_coins += 1
-                else:
-                    consecutive_coins = 0
-                if consecutive_coins == 4:
-                    print("Yellow player won. Vertical win")
-                    self.yellow_player_won = True
-                    break
-
-    def horizontal_win_con(self):
-        '''Function to check where there are 4 yellow coins in horizontal.'''
-        consecutive_coins = 0
-        for k in range(len(self.matrix)):
-            consecutive_coins = 0
-            for j in range(len(self.matrix[0])):
-                if self.matrix[k][j] == "Y":
-                    consecutive_coins += 1
-                else:
-                    consecutive_coins = 0
-                if consecutive_coins == 4:
-                    print("Yellow player won. Horizontal win")
-                    self.yellow_player_won = True
-                    break
-
-    def diagonal_win_con_negative(self):
-        '''Function to check if there are 4 coins diagonally aligned in a negative manner.'''
-        for k in range(3,len(self.matrix[0])):
-            for j in range(len(self.matrix)):
-                if (self.matrix[j][k] == "Y" and self.matrix[j-1][k-1] == "Y" and self.matrix[j-2][k-2] == "Y" and self.matrix[j-3][k-3] == "Y"):
-                    consecutive_coins = 4
-                    if consecutive_coins == 4:
-                        print("Yellow player won Diagonally Negative!")
-                        self.yellow_player_won = True
-    
-    def diagonal_win_con_positive(self):
-        '''Function to check if there are 4 coins diagonally aligned in a positive manner.'''
-        for k in range(len(self.matrix[0])-3):
-            for j in range(3,len(self.matrix)):
-                if (self.matrix[j][k] == "Y" and self.matrix[j-1][k+1] == "Y" and self.matrix[j-2][k+2] == "Y" and self.matrix[j-3][k+3] == "Y"):
-                    consecutive_coins = 4
-                    if consecutive_coins == 4:
-                        print("Yellow player won Diagonally Positive!")
-                        self.yellow_player_won = True
-
-#------------------------------------------------------------------------------------------------------------------#
-#                                    CHECK AI WIN-CON                                                   #
-#------------------------------------------------------------------------------------------------------------------#
-    def red_vertical_win_con(self):
-            '''Function to check where there are 4 red coins in vertical'''
-            red_consecutive_coins = 0
-            for k in range(len(self.matrix[0])):
-                red_consecutive_coins = 0
-                for j in range(len(self.matrix)):
-                    if self.matrix[j][k] == "R":
-                        red_consecutive_coins += 1
-                    else:
-                        red_consecutive_coins = 0
-                    if red_consecutive_coins == 4:
-                        print("Red player won. Vertical win")
-                        self.red_player_won = True
-                        break
-
-    def red_horizontal_win_con(self):
-        '''Function to check where there are 4 red coins in horizontal.'''
-        red_consecutive_coins = 0
-        for k in range(len(self.matrix)):
-            red_consecutive_coins = 0
-            for j in range(len(self.matrix[0])):
-                if self.matrix[k][j] == "R":
-                    red_consecutive_coins += 1
-                else:
-                    red_consecutive_coins = 0
-                if red_consecutive_coins == 4:
-                    print("Yellow player won. Horizontal win")
-                    self.red_player_won = True
-                    break
-
-    def red_diagonal_win_con_negative(self):
-        '''Function to check if there are 4 red coins diagonally aligned in a negative manner.'''
-        for k in range(3,len(self.matrix[0])):
-            for j in range(len(self.matrix)):
-                if (self.matrix[j][k] == "R" and self.matrix[j-1][k-1] == "R" and self.matrix[j-2][k-2] == "R" and self.matrix[j-3][k-3] == "R"):
-                    red_consecutive_coins = 4
-                    if red_consecutive_coins == 4:
-                        print("Yellow player won Diagonally Negative!")
-                        self.red_player_won = True
-    
-    def red_diagonal_win_con_positive(self):
-        '''Function to check if there are 4 red coins diagonally aligned in a positive manner.'''
-        for k in range(len(self.matrix[0])-3):
-            for j in range(3,len(self.matrix)):
-                if (self.matrix[j][k] == "R" and self.matrix[j-1][k+1] == "R" and self.matrix[j-2][k+2] == "R" and self.matrix[j-3][k+3] == "R"):
-                    red_consecutive_coins = 4
-                    if red_consecutive_coins == 4:
-                        print("Yellow player won Diagonally Positive!")
-                        self.red_player_won = True
-
 #------------------------------------------------------------------------------------------------------------------------#
 #                                               YELLOW MOVE                                                              #
 #------------------------------------------------------------------------------------------------------------------------#
@@ -246,10 +144,10 @@ class MainWindow(QMainWindow):
                     self.enable_coins() #Enable certain spots when a coin is
                     self.matrix_handling()
                     self.enable_coins()
-                    self.vertical_win_con()
-                    self.horizontal_win_con()
-                    self.diagonal_win_con_negative()
-                    self.diagonal_win_con_positive()
+                    WinCondition.vertical_win_con(self)
+                    WinCondition.horizontal_win_con(self) 
+                    WinCondition.diagonal_win_con_negative(self)
+                    WinCondition.diagonal_win_con_positive(self)
                     self.check_winner()
                     self.print_grid()
                     self.yellowTurn = False
@@ -267,10 +165,10 @@ class MainWindow(QMainWindow):
             self.matrix_handling() #Place a "R" on the virtual 2d matrix.
 
             #Red players winCon
-            self.red_vertical_win_con()
-            self.red_horizontal_win_con()
-            self.red_diagonal_win_con_negative()
-            self.red_diagonal_win_con_positive()
+            AiWinCondition.red_horizontal_win_con(self)
+            AiWinCondition.red_vertical_win_con(self)
+            AiWinCondition.red_diagonal_win_con_negative(self)
+            AiWinCondition.red_diagonal_win_con_positive(self)
             self.check_winner()
             #Uncomment to print grid to the stdout.
             self.print_grid()
