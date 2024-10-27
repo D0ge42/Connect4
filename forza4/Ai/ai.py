@@ -4,6 +4,7 @@ from Referee.referee import Referee
 import random
 
 class Ai():
+    
     def redMove(self):
         '''Function that handles red turn. It places coins, checks for win conditions and switch turn when self turn has finished.'''
         if self.redTurn:
