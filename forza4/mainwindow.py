@@ -6,8 +6,9 @@ from PySide6.QtWidgets import QApplication, QMainWindow
 from PySide6.QtCore import QTimer
 from ui_form import Ui_MainWindow
 from WinConPlayer.wincon import WinCondition
-from WinConAi.winconAi import AiWinCondition
 from Board.board import Board
+from Ai.ai import Ai
+from Referee.referee import Referee
 
 
 class MainWindow(QMainWindow):
@@ -65,7 +66,7 @@ class MainWindow(QMainWindow):
         else:
             self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
         if self.redTurn:
-            self.redMove() 
+            Ai.redMove(self) 
 
 #------------------------------------------------------------------------------------------------------------------------#
 #                                               YELLOW MOVE                                                              #
@@ -98,96 +99,19 @@ class MainWindow(QMainWindow):
                     WinCondition.horizontal_win_con(self) 
                     WinCondition.diagonal_win_con_negative(self)
                     WinCondition.diagonal_win_con_positive(self)
-                    self.check_winner()
+                    Referee.check_winner(self)
                     Board.print_grid(self)
                     self.yellowTurn = False
                     if self.yellowTurn == False:
                         self.ui.currentTurn.setStyleSheet(("color: red; background-color: red"))
                     self.redTurn = True
-                    QTimer.singleShot(2000,self.redMove)
+                    QTimer.singleShot(2000, lambda: Ai.redMove(self))
 
-    def redMove(self):
-        '''Function that handles red turn. It places coins, checks for win conditions and switch turn when self turn has finished.'''
-        if self.redTurn:
-            self.check_available_moves() #Check available move
-            self.red_insert_coin() #Use above method to place a red coin.
-            Board.enable_coins(self) #Enable the coin above the one we've just placed.
-            Board.matrix_handling(self) #Place a "R" on the virtual 2d matrix.
-
-            #Red players winCon
-            AiWinCondition.red_horizontal_win_con(self)
-            AiWinCondition.red_vertical_win_con(self)
-            AiWinCondition.red_diagonal_win_con_negative(self)
-            AiWinCondition.red_diagonal_win_con_positive(self)
-            self.check_winner()
-            #Uncomment to print grid to the stdout.
-            Board.print_grid(self)
-
-            #Switch turn
-            self.redTurn = False
-            if self.redTurn == False:
-                self.ui.currentTurn.setStyleSheet(("color: yellow; background-color: yellow"))
-            self.yellowTurn = True
-    
-
+ 
     #----------------------------------------------------------------------------------------------------------------------------#
     #                                           AI MOVE                                                                          #
     #----------------------------------------------------------------------------------------------------------------------------#
-    
-
-    def check_available_moves(self):
-        '''Function to check which available moves are available for the bot.'''
-        available_moves = []
-        seen = None
-        for button in self.buttons:
-            if button.isEnabled() == True:
-                available_moves.append(button)
-
-        for button in available_moves:
-            if button.isEnabled() == True:
-                move = random.choice(available_moves)
-                if seen != move:
-                    move_to_use = move
-                else:
-                    continue
-                break
-
-        self.red_button_name = (move_to_use.objectName())
-
-    def red_insert_coin(self):
-        '''Function to place a red player coin. It will use the spot provided by check_available_moves.'''
-        for button in self.buttons:
-            if self.red_button_name == button.objectName():
-                button.setEnabled(False) #Make it so clicked buttons are disabled to avoid strange behaviours.
-                button.setMinimumSize(0,80) 
-                button.setMaximumSize(80,80)
-                button.setStyleSheet("border-radius:40px; color: red; background-color: red")
-                self.redCoordinateY = int(self.red_button_name[1])
-                self.redCoordinateX = int(self.red_button_name[2])
-
-    def check_winner(self):
-        '''Function that triggers if self.red_player_won or self.yellow_player_won is True.
-           It displays a text message on screen and reset winner's bool to False'''
-        if self.red_player_won:
-            self.ui.label.setEnabled(True)
-            self.ui.label.setText("BOT WON! CONGRATZ ᕙ(  •̀ ᗜ •́  )ᕗ")
-            self.red_player_won = False
-            QTimer.singleShot(2000, self.resetBoard)
-
-        elif self.yellow_player_won:
-            self.ui.label.setEnabled(True)
-            self.ui.label.setText("YOU WON! CONGRATZ ᕙ(  •̀ ᗜ •́  )ᕗ")
-            self.yellow_player_won = False
-            QTimer.singleShot(2000,self.resetBoard)
-
-    def draw(self):
-        '''Function that will handle draws'''
-        i = 1
-        for button in self.buttons:
-            if button.isEnabled():
-                print(f"{i} bottoni abilitati")
-                i += 1
-
+ 
     def resetBoard(self):
         '''Function to resetBoard to 0. It can be called either by clicking or winning/drawing the game.'''
         self.ui.label.setText("")
@@ -207,7 +131,7 @@ class MainWindow(QMainWindow):
         self.redTurn = False
         Board.randomTurn(self)
         if self.redTurn:
-            self.redMove()
+            Ai.redMove(self)
             
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -1,6 +1,7 @@
 
 import random
 
+
 class Board():
 
     def start_game(self):
@@ -31,7 +32,7 @@ class Board():
             self.redTurn = True
         else:
             print("Comincia il giallo!")
-            Board.yellowTurn = True
+            self.yellowTurn = True
 
     def button_assign_function(self):
         '''Function to assign to each button the self.buttonPressed() function on click.'''
